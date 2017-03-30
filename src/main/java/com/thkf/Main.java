@@ -1,6 +1,8 @@
 package com.thkf;
 
+import com.thkf.dao.AccountDao;
 import com.thkf.dao.HibernateUtils;
+import com.thkf.dao.interfaces.IAccountDao;
 import com.thkf.models.Account;
 import com.thkf.models.LoginWith;
 import javafx.application.Application;
@@ -9,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class Main extends Application {
 
@@ -16,13 +19,23 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
 
         Session session = HibernateUtils.getSessionFactory().openSession();
-        session.beginTransaction();
+//        session.beginTransaction();
+
+        IAccountDao dao = new AccountDao(session);
+//        dao.setSession(session);
 
         Account a = new Account("ArbazMateen", "Mateen@123");
-        a.setLoginWith(LoginWith.FACEBOOK);
-        session.save(a);
+        a.setLoginWith(LoginWith.GOOGLE);
 
-        session.getTransaction().commit();
+        Transaction tx = session.beginTransaction();
+
+        dao.save(a);
+
+        tx.commit();
+
+//        session.save(a);
+
+//        session.getTransaction().commit();
         session.close();
         HibernateUtils.getSessionFactory().close();
 

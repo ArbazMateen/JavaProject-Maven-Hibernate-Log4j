@@ -74,6 +74,10 @@ public class Account {
     @Column(name = "BIRTH_DATE")
     private Date birthDate;
 
+    @Nullable
+    @Column(name = "DESCRIPTION")
+    private String description;
+
     public Account() {
     }
 
